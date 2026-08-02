@@ -1,0 +1,162 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  clerkId   String   @unique
+  email     String   @unique
+  name      String?
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+}
+
+model Campaign {
+  id            String         @id @default(uuid())
+  name          String
+  slug          String         @unique
+  featuredImage String?
+  seoTitle      String?
+  seoDescription String?
+  status        ContentStatus  @default(DRAFT)
+  trafficSource String?
+  finalCtaUrl   String?
+  
+  pages         CampaignPage[]
+  categories    Category[]     @relation("CampaignToCategory")
+  tags          Tag[]          @relation("CampaignToTag")
+  analytics     Analytics[]
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model CampaignPage {
+  id          String   @id @default(uuid())
+  title       String
+  content     String   // Rich Text JSON or HTML
+  order       Int
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  
+  seoTitle    String?
+  seoDescription String?
+  ctaText     String?
+  ctaUrl      String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Category {
+  id          String     @id @default(uuid())
+  name        String     @unique
+  slug        String     @unique
+  parentId    String?
+  parent      Category?  @relation("SubCategories", fields: [parentId], references: [id])
+  children    Category[] @relation("SubCategories")
+  
+  campaigns   Campaign[] @relation("CampaignToCategory")
+  articles    Article[]  @relation("ArticleToCategory")
+}
+
+model Tag {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  slug      String     @unique
+  campaigns Campaign[] @relation("CampaignToTag")
+  articles  Article[]  @relation("ArticleToTag")
+}
+
+model Article {
+  id            String         @id @default(uuid())
+  title         String
+  slug          String         @unique
+  content       String
+  featuredImage String?
+  status        ContentStatus  @default(DRAFT)
+  
+  seoTitle      String?
+  seoDescription String?
+  
+  categories    Category[] @relation("ArticleToCategory")
+  tags          Tag[]      @relation("ArticleToTag")
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Media {
+  id        String   @id @default(uuid())
+  url       String
+  filename  String
+  altText   String?
+  folder    String?
+  size      Int
+  mimeType  String
+  createdAt DateTime @default(now())
+}
+
+model Analytics {
+  id          String   @id @default(uuid())
+  campaignId  String?
+  campaign    Campaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  pageUrl     String
+  visitorId   String
+  country     String?
+  device      String?
+  browser     String?
+  referrer    String?
+  timeOnPage  Int?
+  bounced     Boolean  @default(false)
+  completed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model AdvertisementSettings {
+  id          String   @id @default(uuid())
+  name        String
+  placement   AdPlacement
+  code        String
+  isActive    Boolean  @default(true)
+  global      Boolean  @default(true)
+}
+
+enum AdPlacement {
+  HEADER
+  FOOTER
+  TOP_CONTENT
+  MIDDLE_CONTENT
+  BOTTOM_CONTENT
+  SIDEBAR
+  STICKY_BANNER
+}
+
+model Settings {
+  id          String   @id @default(uuid())
+  siteName    String
+  logoUrl     String?
+  faviconUrl  String?
+  socialLinks String?  // Changed to String from Json due to Prisma limitations on some DBs, or we can use Json since we use PostgreSQL. I'll stick to Json. Let's fix that below in a moment. Wait, Postgres supports Json perfectly.
+  footerText  String?
+  contactEmail String?
+  analyticsIds String?
+  smtpConfig  String?
+  theme       String   @default("system")
+}
