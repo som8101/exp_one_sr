@@ -211,26 +211,20 @@ export default async function CampaignViewerPage({
             {/* Pagination Footer */}
             <div className="mt-16 pt-8 border-t flex flex-col sm:flex-row items-center justify-between gap-4">
               {hasPrevPage ? (
-                <Button asChild variant="outline" size="lg" className="gap-2 w-full sm:w-auto">
-                  <Link href={`/c/${campaign.slug}?p=${pageIndex}`}>
-                    <ArrowLeft className="h-4 w-4" /> Previous Chapter
-                  </Link>
+                <Button render={<Link href={`/c/${campaign.slug}?p=${pageIndex}`} />} nativeButton={false} variant="outline" size="lg" className="gap-2 w-full sm:w-auto">
+                  <ArrowLeft className="h-4 w-4" /> Previous Chapter
                 </Button>
               ) : (
                 <div className="hidden sm:block" />
               )}
               
               {hasNextPage ? (
-                <Button asChild size="lg" className="gap-2 w-full sm:w-auto">
-                  <Link href={`/c/${campaign.slug}?p=${pageIndex + 2}`}>
-                    Next Chapter <ArrowRight className="h-4 w-4" />
-                  </Link>
+                <Button render={<Link href={`/c/${campaign.slug}?p=${pageIndex + 2}`} />} nativeButton={false} size="lg" className="gap-2 w-full sm:w-auto">
+                  Next Chapter <ArrowRight className="h-4 w-4" />
                 </Button>
               ) : (
-                <Button asChild size="lg" className="gap-2 w-full sm:w-auto">
-                  <Link href={currentPage.ctaUrl || campaign.finalCtaUrl || "/"}>
-                    {currentPage.ctaText || "Finish Reading"} <ArrowRight className="h-4 w-4" />
-                  </Link>
+                <Button render={<Link href={currentPage.ctaUrl || campaign.finalCtaUrl || "/"} />} nativeButton={false} size="lg" className="gap-2 w-full sm:w-auto">
+                  {currentPage.ctaText || "Finish Reading"} <ArrowRight className="h-4 w-4" />
                 </Button>
               )}
             </div>

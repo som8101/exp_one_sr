@@ -40,7 +40,7 @@ export default async function CampaignsPage() {
             Manage your content campaigns and articles.
           </p>
         </div>
-        <Button render={<Link href="/dashboard/campaigns/new" />}>
+        <Button render={<Link href="/dashboard/campaigns/new" />} nativeButton={false}>
           <Plus className="mr-2 h-4 w-4" /> New Campaign
         </Button>
       </div>
