@@ -37,7 +37,7 @@ export async function getDashboardAnalytics() {
     viewsByDay[dateStr] = 0;
   }
 
-  recentAnalytics.forEach(record => {
+  recentAnalytics.forEach((record: { createdAt: Date }) => {
     const dateStr = record.createdAt.toISOString().split('T')[0];
     if (viewsByDay[dateStr] !== undefined) {
       viewsByDay[dateStr]++;
