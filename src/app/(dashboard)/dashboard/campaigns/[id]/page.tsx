@@ -69,7 +69,7 @@ export default async function EditCampaignPage({
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {campaign.pages.map((page) => (
+                  {campaign.pages.map((page: any) => (
                     <div key={page.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div>
                         <h4 className="font-semibold">{page.title}</h4>
