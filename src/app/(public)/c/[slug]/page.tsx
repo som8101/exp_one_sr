@@ -72,8 +72,8 @@ export default async function CampaignViewerPage({
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
             <h1 className="text-3xl font-bold mb-4">{campaign.name}</h1>
             <p className="text-muted-foreground mb-8">This article is being written. Check back later!</p>
-            <Button asChild>
-              <Link href="/">Back to Home</Link>
+            <Button render={<Link href="/" />} nativeButton={false}>
+              Back to Home
             </Button>
           </div>
         </div>
