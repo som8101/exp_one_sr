@@ -73,7 +73,7 @@ export function Navbar() {
           <ThemeToggle />
           
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>
+            <SheetTrigger render={
               <Button
                 variant="ghost"
                 className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
@@ -81,7 +81,7 @@ export function Navbar() {
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Toggle Menu</span>
               </Button>
-            </SheetTrigger>
+            } />
             <SheetContent side="right" className="pr-0">
               <SheetTitle className="text-left">Navigation</SheetTitle>
               <SheetDescription className="text-left">

@@ -37,7 +37,9 @@ export default async function EditCampaignPage({
               id: campaign.id,
               name: campaign.name,
               slug: campaign.slug,
+              seoTitle: campaign.seoTitle || "",
               seoDescription: campaign.seoDescription || "",
+              featuredImage: campaign.featuredImage || "",
               status: campaign.status,
             }}
           />
@@ -50,11 +52,11 @@ export default async function EditCampaignPage({
                 <CardDescription>Manage the articles inside this campaign.</CardDescription>
               </div>
               <Dialog>
-                <DialogTrigger asChild>
+                <DialogTrigger render={
                   <Button size="sm">
                     <Plus className="mr-2 h-4 w-4" /> Add Page
                   </Button>
-                </DialogTrigger>
+                } />
                 <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                   <PageForm campaignId={campaign.id} />
                 </DialogContent>
@@ -73,9 +75,7 @@ export default async function EditCampaignPage({
                         <h4 className="font-semibold">{page.title}</h4>
                       </div>
                       <Dialog>
-                        <DialogTrigger asChild>
-                          <Button variant="outline" size="sm">Edit</Button>
-                        </DialogTrigger>
+                        <DialogTrigger render={<Button variant="outline" size="sm">Edit</Button>} />
                         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                           <PageForm campaignId={campaign.id} initialData={page} />
                         </DialogContent>

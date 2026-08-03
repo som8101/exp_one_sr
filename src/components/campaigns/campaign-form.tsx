@@ -29,7 +29,7 @@ const formSchema = z.object({
   seoTitle: z.string().optional(),
   seoDescription: z.string().optional(),
   featuredImage: z.string().optional(),
-  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).default("DRAFT"),
+  status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]),
 });
 
 type CampaignFormProps = {

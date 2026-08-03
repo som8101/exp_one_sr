@@ -98,7 +98,7 @@ export function SettingsForm({ initialData }: SettingsFormProps) {
             <Label>Default Theme</Label>
             <Select 
               defaultValue={initialData.theme} 
-              onValueChange={(val) => setValue("theme", val)}
+              onValueChange={(val) => val && setValue("theme", val)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select a theme" />
