@@ -13,7 +13,7 @@ export default async function SettingsPage() {
         </div>
       </div>
       
-      <SettingsForm initialData={settings} />
+      <SettingsForm initialData={{ ...settings, siteDescription: "" }} />
     </div>
   );
 }

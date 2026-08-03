@@ -75,7 +75,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           <div className="flex-1" />
           <div className="flex items-center gap-4">
             <ThemeToggle />
-            <UserButton afterSignOutUrl="/" />
+            <UserButton />
           </div>
         </header>
         <main className="flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">

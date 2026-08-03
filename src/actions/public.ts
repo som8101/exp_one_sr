@@ -25,6 +25,7 @@ export async function getCampaignBySlug(slug: string) {
       status: "PUBLISHED",
     },
     include: {
+      categories: true,
       pages: {
         orderBy: {
           order: "asc",

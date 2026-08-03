@@ -101,8 +101,8 @@ export default async function HomePage() {
                 <div className="h-6 w-1.5 bg-primary rounded-full" />
                 <h2 className="text-2xl font-bold tracking-tight">Latest Articles</h2>
               </div>
-              <Button asChild variant="ghost" className="text-primary">
-                <Link href="/search?q=latest">View All <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              <Button render={<Link href="/search?q=latest" />} nativeButton={false} variant="ghost" className="text-primary">
+                View All <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
             
@@ -216,7 +216,7 @@ export default async function HomePage() {
 
           <section>
             <h3 className="text-2xl font-bold mb-6">Frequently Asked Questions</h3>
-            <Accordion type="single" collapsible className="w-full">
+            <Accordion className="w-full">
               <AccordionItem value="item-1">
                 <AccordionTrigger>Is the content really free?</AccordionTrigger>
                 <AccordionContent>

@@ -48,12 +48,12 @@ export function MediaPicker({ onSelect }: { onSelect: (url: string) => void }) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+      <DialogTrigger render={
         <Button variant="ghost" size="sm" className="h-8 w-8 p-0" title="Insert Image">
           <ImageIcon className="h-4 w-4" />
           <span className="sr-only">Insert Image</span>
         </Button>
-      </DialogTrigger>
+      } />
       <DialogContent className="max-w-4xl max-h-[85vh] overflow-hidden flex flex-col">
         <DialogHeader>
           <DialogTitle>Media Library</DialogTitle>

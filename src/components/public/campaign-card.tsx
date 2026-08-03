@@ -114,10 +114,8 @@ export function CampaignCard({ campaign, layout = "grid" }: CampaignCardProps) {
           <User className="h-4 w-4" /> 
           <span>Editor</span>
         </div>
-        <Button asChild variant="ghost" size="sm" className="gap-1 -mr-3 group-hover:text-primary">
-          <Link href={`/c/${campaign.slug}`}>
-            Read <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
+        <Button render={<Link href={`/c/${campaign.slug}`} />} nativeButton={false} variant="ghost" size="sm" className="gap-1 -mr-3 group-hover:text-primary">
+          Read <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </Button>
       </CardFooter>
     </Card>

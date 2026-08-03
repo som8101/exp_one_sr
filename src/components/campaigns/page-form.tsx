@@ -113,7 +113,7 @@ export function PageForm({ campaignId, initialData, onSuccess }: PageFormProps) 
         {errors.content && <p className="text-sm text-destructive">{errors.content.message}</p>}
       </div>
 
-      <Accordion type="single" collapsible className="w-full">
+      <Accordion className="w-full">
         <AccordionItem value="seo">
           <AccordionTrigger>SEO & Call To Action (Optional)</AccordionTrigger>
           <AccordionContent className="space-y-4 pt-4">

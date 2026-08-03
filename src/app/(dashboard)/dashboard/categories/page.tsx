@@ -29,11 +29,11 @@ export default async function CategoriesPage() {
         </div>
         
         <Dialog>
-          <DialogTrigger asChild>
+          <DialogTrigger render={
             <Button className="gap-2">
               <Plus className="h-4 w-4" /> Create Category
             </Button>
-          </DialogTrigger>
+          } />
           <DialogContent>
             <CategoryForm />
           </DialogContent>
@@ -58,9 +58,7 @@ export default async function CategoriesPage() {
                 <TableCell>{category._count.campaigns}</TableCell>
                 <TableCell className="text-right">
                   <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="ghost" size="sm">Edit</Button>
-                    </DialogTrigger>
+                    <DialogTrigger render={<Button variant="ghost" size="sm">Edit</Button>} />
                     <DialogContent>
                       <CategoryForm initialData={category} />
                     </DialogContent>

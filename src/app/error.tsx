@@ -30,8 +30,8 @@ export default function Error({
         <Button onClick={() => reset()} variant="default">
           <RotateCcw className="mr-2 h-4 w-4" /> Try again
         </Button>
-        <Button asChild variant="outline">
-          <Link href="/">Return to Homepage</Link>
+        <Button render={<Link href="/" />} nativeButton={false} variant="outline">
+          Return to Homepage
         </Button>
       </div>
     </div>
