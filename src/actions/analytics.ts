@@ -65,7 +65,7 @@ export async function getDashboardAnalytics() {
 
   // Resolve campaign names
   const resolvedTopCampaigns = await Promise.all(
-    topCampaigns.filter(c => c.campaignId).map(async (c) => {
+    topCampaigns.filter((c: any) => c.campaignId).map(async (c: any) => {
       const campaign = await prisma.campaign.findUnique({
         where: { id: c.campaignId as string },
         select: { name: true }
