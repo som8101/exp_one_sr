@@ -19,6 +19,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "CampaignFlow CMS",
   description: "Create, manage, and distribute high-value content campaigns across all your social channels.",
+  other: {
+    "google-adsense-account": "ca-pub-3835252173185326"
+  }
 };
 
 export default function RootLayout({
@@ -34,12 +37,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       >
         <head>
-          <Script
-            async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3835252173185326"
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-          />
         </head>
         <body suppressHydrationWarning className="min-h-full flex flex-col">
           <ThemeProvider
