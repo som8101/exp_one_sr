@@ -95,7 +95,7 @@ export function MediaUploader() {
           onChange={onFileChange}
           disabled={isUploading}
         />
-        <Button render={<label htmlFor="file-upload" className="cursor-pointer" />} variant="secondary" disabled={isUploading}>
+        <Button render={<label htmlFor="file-upload" className="cursor-pointer" />} nativeButton={false} variant="secondary" disabled={isUploading}>
           Select a file
         </Button>
       </div>
