@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
-import { existsSync } from "fs";
+import { createClient } from "@supabase/supabase-js";
 
 export async function POST(req: NextRequest) {
   try {
@@ -26,16 +24,30 @@ export async function POST(req: NextRequest) {
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
     const filename = `${uniqueSuffix}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
     
-    // Ensure uploads directory exists
-    const uploadDir = join(process.cwd(), "public", "uploads");
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
+    // Initialize Supabase
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Upload to Supabase Storage
+    const { data, error } = await supabase
+      .storage
+      .from('uploads')
+      .upload(filename, buffer, {
+        contentType: file.type,
+        upsert: false
+      });
+
+    if (error) {
+      console.error("Supabase storage error:", error);
+      throw error;
     }
 
-    const filepath = join(uploadDir, filename);
-    await writeFile(filepath, buffer);
-
-    const publicUrl = `/uploads/${filename}`;
+    // Get public URL
+    const { data: { publicUrl } } = supabase
+      .storage
+      .from('uploads')
+      .getPublicUrl(filename);
 
     const media = await prisma.media.create({
       data: {

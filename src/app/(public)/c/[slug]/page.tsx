@@ -10,6 +10,32 @@ import { TwitterIcon, FacebookIcon, LinkedinIcon } from "@/components/public/soc
 import { AnalyticsTracker } from "@/components/shared/analytics-tracker";
 import { AdSlot } from "@/components/public/ad-slot";
 import { CampaignCard } from "@/components/public/campaign-card";
+import parse, { domToReact, attributesToProps, Element } from 'html-react-parser';
+import { CustomActionButton } from "@/components/public/custom-action-button";
+
+const parseOptions = {
+  replace: (domNode: any) => {
+    if (domNode instanceof Element && domNode.name === 'img') {
+      const props = attributesToProps(domNode.attribs);
+      return (
+        <div className="my-8 w-full flex flex-col items-center">
+          <AdSlot placement="INLINE" className="mb-6 w-full max-w-[728px] h-[90px] md:h-[250px]" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img {...props} className="rounded-xl max-w-full h-auto shadow-sm" />
+        </div>
+      );
+    }
+    if (domNode instanceof Element && domNode.name === 'button' && domNode.attribs['data-custom-btn'] === 'true') {
+      const url = domNode.attribs['data-url'] || '#';
+      const loading = domNode.attribs['data-loading'] === 'true';
+      return (
+        <CustomActionButton url={url} useLoading={loading}>
+          {domToReact(domNode.children as any, parseOptions)}
+        </CustomActionButton>
+      );
+    }
+  }
+};
 
 export async function generateMetadata({ params, searchParams }: { params: Promise<{ slug: string }>, searchParams: Promise<{ p?: string }> }): Promise<Metadata> {
   const resolvedParams = await params;
@@ -190,10 +216,10 @@ export default async function CampaignViewerPage({
             )}
             
             <article className="prose prose-zinc dark:prose-invert lg:prose-lg max-w-none prose-headings:font-bold prose-a:text-primary prose-img:rounded-xl">
-              <div dangerouslySetInnerHTML={{ __html: currentPage.content }} />
+              {parse(currentPage.content, parseOptions)}
             </article>
 
-            {/* AdSlot - Inline */}
+            {/* General AdSlot at bottom of content */}
             <AdSlot placement="INLINE" className="h-[250px] my-12" />
 
             {/* Mobile Share Buttons (Visible only on small screens) */}
