@@ -81,7 +81,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
       <div className="w-px h-6 bg-border mx-1" />
       <MediaPicker 
         onSelect={(url) => {
-          editor.chain().focus().setImage({ src: url }).run();
+          editor.chain().focus().setImage({ src: url }).insertContent('<p></p>').run();
         }} 
       />
     </div>
