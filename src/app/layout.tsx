@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/shared/theme-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,6 +19,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "CampaignFlow CMS",
   description: "Create, manage, and distribute high-value content campaigns across all your social channels.",
+  other: {
+    "google-adsense-account": "ca-pub-3835252173185326"
+  }
 };
 
 export default function RootLayout({
@@ -32,6 +36,8 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       >
+        <head>
+        </head>
         <body suppressHydrationWarning className="min-h-full flex flex-col">
           <ThemeProvider
             attribute="class"
