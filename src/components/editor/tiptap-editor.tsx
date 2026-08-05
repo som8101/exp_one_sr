@@ -4,9 +4,10 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import { Toggle } from "@/components/ui/toggle";
-import { Bold, Italic, Strikethrough, List, ListOrdered, Heading2, Quote } from "lucide-react";
+import { Bold, Italic, Strikethrough, List, ListOrdered, Heading2, Quote, MousePointerClick } from "lucide-react";
 import { MediaPicker } from "@/components/media/media-picker";
 import { useEffect } from "react";
+import { CustomButton } from "./extensions/button-extension";
 
 type TiptapEditorProps = {
   content: string;
@@ -78,6 +79,21 @@ const MenuBar = ({ editor }: { editor: any }) => {
       >
         <Quote className="h-4 w-4" />
       </Toggle>
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("customButton")}
+        onPressedChange={() => {
+          const text = window.prompt('Button text (e.g. "Buy Now"):');
+          if (!text) return;
+          const url = window.prompt('Button link URL (e.g. "https://example.com"):');
+          if (!url) return;
+          const loading = window.confirm('Show loading spinner when clicked? (OK = Yes, Cancel = No)');
+          editor.chain().focus().setCustomButton({ text, url, loading }).run();
+        }}
+        aria-label="Add Button"
+      >
+        <MousePointerClick className="h-4 w-4" />
+      </Toggle>
       <div className="w-px h-6 bg-border mx-1" />
       <MediaPicker 
         onSelect={(url) => {
@@ -101,6 +117,7 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
           class: "rounded-md border my-4 max-w-full h-auto",
         },
       }),
+      CustomButton,
     ],
     content,
     editorProps: {
