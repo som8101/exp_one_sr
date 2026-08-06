@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { createCampaignPage, updateCampaignPage, deleteCampaignPage } from "@/actions/campaign-pages";
 
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -46,6 +47,7 @@ type PageFormProps = {
 export function PageForm({ campaignId, initialData, onSuccess }: PageFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<z.infer<typeof formSchema>>({
@@ -66,12 +68,14 @@ export function PageForm({ campaignId, initialData, onSuccess }: PageFormProps) 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true);
+      setIsSuccess(false);
       if (initialData) {
         await updateCampaignPage(initialData.id, values);
       } else {
         await createCampaignPage(values);
       }
       
+      setIsSuccess(true);
       router.refresh();
       if (onSuccess) onSuccess();
       
@@ -143,21 +147,17 @@ export function PageForm({ campaignId, initialData, onSuccess }: PageFormProps) 
 
       <div className="flex items-center justify-between pt-4 border-t">
         {initialData ? (
-          <Button 
-            type="button" 
-            variant="destructive" 
-            size="icon" 
-            disabled={isDeleting || isLoading}
-            onClick={handleDelete}
-          >
+          <Button type="button" variant="destructive" size="icon" onClick={handleDelete} disabled={isLoading || isDeleting}>
             {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash className="h-4 w-4" />}
           </Button>
         ) : <div />}
         
-        <Button type="submit" disabled={isLoading || isDeleting}>
-          {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {initialData ? "Save Changes" : "Create Page"}
-        </Button>
+        <SubmitButton 
+          isLoading={isLoading} 
+          isSuccess={isSuccess} 
+          disabled={isDeleting}
+          defaultText={initialData ? "Save Changes" : "Create Page"} 
+        />
       </div>
     </form>
   );

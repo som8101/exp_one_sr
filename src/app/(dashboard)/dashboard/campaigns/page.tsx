@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus, MoreHorizontal, Pencil, Trash } from "lucide-react";
+import { Plus, MoreHorizontal, Pencil, Trash, FolderOpen } from "lucide-react";
 import { getCampaigns } from "@/actions/campaigns";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,63 +53,71 @@ export default async function CampaignsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Pages</TableHead>
-                <TableHead className="hidden md:table-cell">Created at</TableHead>
-                <TableHead>
-                  <span className="sr-only">Actions</span>
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {campaigns.map((campaign) => (
-                <TableRow key={campaign.id}>
-                  <TableCell className="font-medium">
-                    {campaign.name}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant={campaign.status === "PUBLISHED" ? "default" : "secondary"}>
-                      {campaign.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{campaign._count.pages} pages</TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    {format(new Date(campaign.createdAt), "MMM d, yyyy")}
-                  </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger render={<button className="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 w-8 hover:bg-muted" />}>
-                        <MoreHorizontal className="h-4 w-4" />
-                        <span className="sr-only">Toggle menu</span>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuGroup>
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem render={<Link href={`/dashboard/campaigns/${campaign.id}`} />}>
-                            <Pencil className="mr-2 h-4 w-4" /> Edit
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="text-destructive">
-                            <Trash className="mr-2 h-4 w-4" /> Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {campaigns.length === 0 && (
+          {campaigns.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 mb-4">
+                <FolderOpen className="h-10 w-10 text-primary" />
+              </div>
+              <h2 className="text-xl font-semibold tracking-tight">No campaigns created yet</h2>
+              <p className="text-muted-foreground mt-2 max-w-sm mb-6">
+                Campaigns are where you organize your content pages. Create your first campaign to get started.
+              </p>
+              <Button render={<Link href="/dashboard/campaigns/new" />} nativeButton={false}>
+                <Plus className="mr-2 h-4 w-4" /> Create Campaign
+              </Button>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
                 <TableRow>
-                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
-                    No campaigns found. Create one to get started.
-                  </TableCell>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Pages</TableHead>
+                  <TableHead className="hidden md:table-cell">Created at</TableHead>
+                  <TableHead>
+                    <span className="sr-only">Actions</span>
+                  </TableHead>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {campaigns.map((campaign) => (
+                  <TableRow key={campaign.id}>
+                    <TableCell className="font-medium">
+                      {campaign.name}
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={campaign.status === "PUBLISHED" ? "default" : "secondary"}>
+                        {campaign.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{campaign._count.pages} pages</TableCell>
+                    <TableCell className="hidden md:table-cell">
+                      {format(new Date(campaign.createdAt), "MMM d, yyyy")}
+                    </TableCell>
+                    <TableCell>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger render={<button className="inline-flex items-center justify-center rounded-md text-sm font-medium h-8 w-8 hover:bg-muted" />}>
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Toggle menu</span>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuGroup>
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuItem render={<Link href={`/dashboard/campaigns/${campaign.id}`} />}>
+                              <Pencil className="mr-2 h-4 w-4" /> Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-destructive">
+                              <Trash className="mr-2 h-4 w-4" /> Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuGroup>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
     </div>

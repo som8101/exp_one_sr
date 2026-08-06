@@ -14,7 +14,7 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
+import { Plus, Tags } from "lucide-react";
 import { format } from "date-fns";
 
 export default async function CategoriesPage() {
@@ -41,40 +41,55 @@ export default async function CategoriesPage() {
       </div>
 
       <div className="rounded-md border bg-card">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Slug</TableHead>
-              <TableHead>Campaigns</TableHead>
-              <TableHead className="text-right">Action</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {categories.map((category) => (
-              <TableRow key={category.id}>
-                <TableCell className="font-medium">{category.name}</TableCell>
-                <TableCell>{category.slug}</TableCell>
-                <TableCell>{category._count.campaigns}</TableCell>
-                <TableCell className="text-right">
-                  <Dialog>
-                    <DialogTrigger render={<Button variant="ghost" size="sm">Edit</Button>} />
-                    <DialogContent>
-                      <CategoryForm initialData={category} />
-                    </DialogContent>
-                  </Dialog>
-                </TableCell>
-              </TableRow>
-            ))}
-            {categories.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={4} className="h-24 text-center">
-                  No categories found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+          {categories.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 mb-4">
+                <Tags className="h-10 w-10 text-primary" />
+              </div>
+              <h2 className="text-xl font-semibold tracking-tight">No categories found</h2>
+              <p className="text-muted-foreground mt-2 max-w-sm mb-6">
+                Categories help you group and organize your campaigns. Create your first category to get started.
+              </p>
+              <Dialog>
+                <DialogTrigger render={
+                  <Button className="gap-2">
+                    <Plus className="h-4 w-4" /> Create Category
+                  </Button>
+                } />
+                <DialogContent>
+                  <CategoryForm />
+                </DialogContent>
+              </Dialog>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Slug</TableHead>
+                  <TableHead>Campaigns</TableHead>
+                  <TableHead className="text-right">Action</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {categories.map((category) => (
+                  <TableRow key={category.id}>
+                    <TableCell className="font-medium">{category.name}</TableCell>
+                    <TableCell>{category.slug}</TableCell>
+                    <TableCell>{category._count.campaigns}</TableCell>
+                    <TableCell className="text-right">
+                      <Dialog>
+                        <DialogTrigger render={<Button variant="ghost" size="sm">Edit</Button>} />
+                        <DialogContent>
+                          <CategoryForm initialData={category} />
+                        </DialogContent>
+                      </Dialog>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
       </div>
     </div>
   );

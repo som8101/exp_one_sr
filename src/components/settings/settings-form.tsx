@@ -8,7 +8,7 @@ import * as z from "zod";
 import { updateGlobalSettings } from "@/actions/settings";
 import { useTheme } from "next-themes";
 
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -42,6 +42,7 @@ export function SettingsForm({ initialData }: SettingsFormProps) {
   const router = useRouter();
   const { setTheme } = useTheme();
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -56,8 +57,10 @@ export function SettingsForm({ initialData }: SettingsFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true);
+      setIsSuccess(false);
       await updateGlobalSettings(values);
       setTheme(values.theme);
+      setIsSuccess(true);
       router.refresh();
     } catch (error) {
       console.error("Failed to save settings", error);
@@ -111,10 +114,11 @@ export function SettingsForm({ initialData }: SettingsFormProps) {
             </Select>
           </div>
 
-          <Button type="submit" disabled={isLoading}>
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Save Settings
-          </Button>
+          <SubmitButton 
+            isLoading={isLoading} 
+            isSuccess={isSuccess} 
+            defaultText="Save Settings" 
+          />
         </CardContent>
       </Card>
     </form>

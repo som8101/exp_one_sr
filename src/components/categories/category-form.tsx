@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { createCategory, updateCategory } from "@/actions/categories";
 
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -36,6 +36,7 @@ type CategoryFormProps = {
 export function CategoryForm({ initialData, onSuccess }: CategoryFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,12 +62,14 @@ export function CategoryForm({ initialData, onSuccess }: CategoryFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true);
+      setIsSuccess(false);
       if (initialData) {
         await updateCategory(initialData.id, values);
       } else {
         await createCategory(values);
       }
       
+      setIsSuccess(true);
       router.refresh();
       if (onSuccess) onSuccess();
       
@@ -109,10 +112,12 @@ export function CategoryForm({ initialData, onSuccess }: CategoryFormProps) {
             {errors.slug && <p className="text-sm text-destructive">{errors.slug.message}</p>}
           </div>
           
-          <Button type="submit" disabled={isLoading} className="w-full">
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {initialData ? "Save Changes" : "Create Category"}
-          </Button>
+          <SubmitButton 
+            isLoading={isLoading} 
+            isSuccess={isSuccess}
+            className="w-full"
+            defaultText={initialData ? "Save Changes" : "Create Category"} 
+          />
         </CardContent>
       </Card>
     </form>

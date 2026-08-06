@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { createCampaign, updateCampaign } from "@/actions/campaigns";
 
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -47,6 +48,7 @@ type CampaignFormProps = {
 export function CampaignForm({ initialData }: CampaignFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -78,11 +80,14 @@ export function CampaignForm({ initialData }: CampaignFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true);
+      setIsSuccess(false);
       if (initialData) {
         await updateCampaign(initialData.id, values);
+        setIsSuccess(true);
         router.refresh();
       } else {
         const newCampaign = await createCampaign(values);
+        setIsSuccess(true);
         router.push(`/dashboard/campaigns/${newCampaign.id}`);
       }
     } catch (error) {
@@ -148,10 +153,11 @@ export function CampaignForm({ initialData }: CampaignFormProps) {
             </p>
           </div>
           
-          <Button type="submit" disabled={isLoading}>
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {initialData ? "Save Changes" : "Create Campaign"}
-          </Button>
+          <SubmitButton 
+            isLoading={isLoading} 
+            isSuccess={isSuccess} 
+            defaultText={initialData ? "Save Changes" : "Create Campaign"} 
+          />
         </CardContent>
       </Card>
 
