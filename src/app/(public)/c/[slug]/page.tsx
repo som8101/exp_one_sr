@@ -12,6 +12,7 @@ import { AdSlot } from "@/components/public/ad-slot";
 import { CampaignCard } from "@/components/public/campaign-card";
 import parse, { domToReact, attributesToProps, Element } from 'html-react-parser';
 import { CustomActionButton } from "@/components/public/custom-action-button";
+import { VideoAdPlayer } from "@/components/public/video-ad-player";
 
 const parseOptions = {
   replace: (domNode: any) => {
@@ -32,6 +33,20 @@ const parseOptions = {
         <CustomActionButton url={url} useLoading={loading}>
           {domToReact(domNode.children as any, parseOptions)}
         </CustomActionButton>
+      );
+    }
+    if (domNode instanceof Element && domNode.name === 'div' && domNode.attribs['data-video-ad'] === 'true') {
+      const thumbnailUrl = domNode.attribs['thumbnailurl'] || '';
+      const title = domNode.attribs['title'] || '';
+      const adUrl = domNode.attribs['adurl'] || '#';
+      const duration = domNode.attribs['duration'] || '10:32';
+      return (
+        <VideoAdPlayer 
+          thumbnailUrl={thumbnailUrl} 
+          title={title} 
+          adUrl={adUrl} 
+          duration={duration} 
+        />
       );
     }
   }

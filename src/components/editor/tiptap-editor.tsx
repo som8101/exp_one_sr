@@ -4,10 +4,11 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import { Toggle } from "@/components/ui/toggle";
-import { Bold, Italic, Strikethrough, List, ListOrdered, Heading2, Quote, MousePointerClick } from "lucide-react";
+import { Bold, Italic, Strikethrough, List, ListOrdered, Heading2, Quote, MousePointerClick, Video } from "lucide-react";
 import { MediaPicker } from "@/components/media/media-picker";
 import { useEffect } from "react";
 import { CustomButton } from "./extensions/button-extension";
+import { VideoAd } from "./extensions/video-ad-extension";
 
 type TiptapEditorProps = {
   content: string;
@@ -94,6 +95,24 @@ const MenuBar = ({ editor }: { editor: any }) => {
       >
         <MousePointerClick className="h-4 w-4" />
       </Toggle>
+      <Toggle
+        size="sm"
+        pressed={editor.isActive("videoAd")}
+        onPressedChange={() => {
+          const thumbnailUrl = window.prompt('Video thumbnail URL (e.g. image link):');
+          if (!thumbnailUrl) return;
+          const title = window.prompt('Video title:');
+          if (!title) return;
+          const adUrl = window.prompt('Ad destination URL when clicked:');
+          if (!adUrl) return;
+          const duration = window.prompt('Video duration (e.g. 10:32):', '10:32');
+          
+          editor.chain().focus().setVideoAd({ thumbnailUrl, title, adUrl, duration: duration || '10:32' }).insertContent('<p></p>').run();
+        }}
+        aria-label="Add Fake Video Player"
+      >
+        <Video className="h-4 w-4" />
+      </Toggle>
       <div className="w-px h-6 bg-border mx-1" />
       <MediaPicker 
         onSelect={(url) => {
@@ -118,6 +137,7 @@ export function TiptapEditor({ content, onChange }: TiptapEditorProps) {
         },
       }),
       CustomButton,
+      VideoAd,
     ],
     content,
     editorProps: {
